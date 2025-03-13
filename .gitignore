@@ -4,3 +4,8 @@
 *.ptx
 *.cubin
 *.fatbin
+
+build/
+
+.cache/
+compile_commands.json
