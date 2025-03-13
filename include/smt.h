@@ -1,14 +1,14 @@
 #pragma once
 
+// Just to provide function declarations for Clangd
+// Including graph implementation headers before any headers in this library is
+// still a requirement!!!
+#include "undirected_graph.h"
+
 #include "colorizer.h"
 #include "utils.h"
 
 #include <z3++.h>
-
-// Just to provide function declarations for Clangd
-// Including graph implementation headers before any headers in this library is
-// still a requirement!!!
-#include <boost/graph/adjacency_list.hpp>
 
 #include <boost/range/adaptors.hpp>
 #include <boost/range/iterator_range.hpp>

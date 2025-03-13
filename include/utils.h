@@ -1,13 +1,13 @@
 #pragma once
 
-#include "concepts.h"
-
-#include <vector>
-
 // Just to provide function declarations for Clangd
 // Including graph implementation headers before any headers in this library is
 // still a requirement!!!
-#include <boost/graph/adjacency_list.hpp>
+#include "undirected_graph.h"
+
+#include "concepts.h"
+
+#include <vector>
 
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graph_traits.hpp>

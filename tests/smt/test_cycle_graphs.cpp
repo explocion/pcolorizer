@@ -3,83 +3,92 @@
 
 #include "smt.h"
 
-TEST(SMTCompleteGraph, K3) {
+TEST(SMTCycleGraph, C3) {
   static constexpr std::size_t V = 3;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 3);
 }
 
-TEST(SMTCompleteGraph, K4) {
+TEST(SMTCycleGraph, C4) {
   static constexpr std::size_t V = 4;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, K6) {
+TEST(SMTCycleGraph, C6) {
   static constexpr std::size_t V = 6;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, K8) {
+TEST(SMTCycleGraph, C8) {
   static constexpr std::size_t V = 8;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, K10) {
+TEST(SMTCycleGraph, C9) {
+  static constexpr std::size_t V = 9;
+  auto graph = generators::make_cycle_graph(V);
+
+  pcolorizer::SmtColorizer colorizer;
+  auto chi = colorizer.min_colors(graph);
+  EXPECT_EQ(chi, 3);
+}
+
+TEST(SMTCycleGraph, C10) {
   static constexpr std::size_t V = 10;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, K12) {
+TEST(SMTCycleGraph, C12) {
   static constexpr std::size_t V = 12;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, K14) {
+TEST(SMTCycleGraph, C14) {
   static constexpr std::size_t V = 14;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, K16) {
+TEST(SMTCycleGraph, C16) {
   static constexpr std::size_t V = 16;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }
 
-TEST(SMTCompleteGraph, Large) {
+TEST(SMTCycleGraph, Large) {
   static constexpr std::size_t V = 256;
-  auto graph = generators::make_complete_graph(V);
+  auto graph = generators::make_cycle_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
   auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
+  EXPECT_EQ(chi, 2);
 }

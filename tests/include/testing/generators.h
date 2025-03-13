@@ -1,25 +1,11 @@
 #pragma once
 
 #include "concepts.h"
-
-#include <boost/graph/adjacency_list.hpp>
-
-namespace pcolorizer {
-
-template <typename OutEdgeListS = boost::vecS,
-          typename VertexListS = boost::vecS,
-          typename VertexProperty = boost::no_property,
-          typename EdgeProperty = boost::no_property,
-          typename GraphProperty = boost::no_property,
-          typename EdgeListS = boost::listS>
-using UndirectedGraph =
-    boost::adjacency_list<OutEdgeListS, VertexListS, boost::undirectedS,
-                          VertexProperty, EdgeProperty, GraphProperty,
-                          EdgeListS>;
+#include "undirected_graph.h"
 
 namespace generators {
 
-template <typename Graph = UndirectedGraph<>>
+template <typename Graph = pcolorizer::UndirectedGraph<>>
 Graph make_complete_graph(std::size_t n) {
   BOOST_CONCEPT_ASSERT((pcolorizer::concepts::VertexColorableGraph<Graph>));
 
@@ -32,7 +18,7 @@ Graph make_complete_graph(std::size_t n) {
   return graph;
 }
 
-template <typename Graph = UndirectedGraph<>>
+template <typename Graph = pcolorizer::UndirectedGraph<>>
 Graph make_cycle_graph(std::size_t n) {
   BOOST_CONCEPT_ASSERT((pcolorizer::concepts::VertexColorableGraph<Graph>));
 
@@ -47,5 +33,3 @@ Graph make_cycle_graph(std::size_t n) {
 }
 
 } // namespace generators
-
-} // namespace pcolorizer
