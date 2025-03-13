@@ -28,51 +28,71 @@ public:
       return (num_vertices % 2) + 2;
     }
 
-    auto lower_bound = GraphColorizer<SmtColorizer>::clique_inf(graph);
-    auto upper_bound =
-        std::min(GraphColorizer<SmtColorizer>::combination_sup(graph),
-                 static_cast<size_type>(max_degree(graph)));
-
-    if (lower_bound == upper_bound) {
-      return lower_bound;
+    auto lower = GraphColorizer<SmtColorizer>::clique_inf(graph);
+    auto upper = std::min(GraphColorizer<SmtColorizer>::combination_sup(graph),
+                          static_cast<size_type>(max_degree(graph)) + 1);
+    if (lower == upper) {
+      return lower;
     }
 
+    auto indices = boost::get(boost::vertex_index, graph);
+
+    z3::set_param("parallel.enable", true);
     z3::context ctx;
-
-    auto vertex_indices = boost::get(boost::vertex_index, graph);
-
-    z3::expr_vector vertex_colors(ctx);
-    vertex_colors.resize(num_vertices);
-    for (auto v : boost::make_iterator_range(boost::vertices(graph))) {
-      auto id = vertex_indices[v];
-      auto color = ctx.int_const(std::to_string(id).c_str());
-      vertex_colors.set(id, color);
-    }
-
-    z3::expr edge_distinctions = ctx.bool_val(true);
-    for (auto e : boost::make_iterator_range(boost::edges(graph))) {
-      auto u = vertex_indices[boost::source(e, graph)];
-      auto v = vertex_indices[boost::target(e, graph)];
-      edge_distinctions =
-          edge_distinctions && (vertex_colors[u] != vertex_colors[v]);
-    }
 
     auto chi = ctx.int_const("chi");
 
-    z3::optimize optimizer(ctx);
-    optimizer.add(chi >= static_cast<int>(lower_bound) &&
-                  chi <= static_cast<int>(upper_bound));
-    optimizer.add(edge_distinctions);
-    for (auto color : vertex_colors) {
-      optimizer.add(color >= 0 && color < chi);
+    z3::expr_vector colors(ctx);
+    colors.resize(num_vertices);
+    for (auto v : boost::make_iterator_range(boost::vertices(graph))) {
+      auto id = indices[v];
+      auto color = ctx.int_const(std::to_string(id).c_str());
+      colors.set(id, color);
     }
+
+    auto bounds = ctx.bool_val(true);
+    for (auto color : colors) {
+      bounds = bounds && (color >= 0 && color < chi);
+    }
+
+    auto edge_distinctions = ctx.bool_val(true);
+    for (auto e : boost::make_iterator_range(boost::edges(graph))) {
+      auto u = indices[boost::source(e, graph)];
+      auto v = indices[boost::target(e, graph)];
+      edge_distinctions = edge_distinctions && (colors[u] != colors[v]);
+    }
+
+    auto assertions = bounds && edge_distinctions;
+
+    z3::params optimizer_parameters(ctx);
+    optimizer_parameters.set("timeout", 10000u);
+
+    z3::optimize optimizer(ctx);
+    optimizer.set(optimizer_parameters);
+    optimizer.set_initial_value(chi, static_cast<int>(upper));
+    optimizer.add(chi >= static_cast<int>(lower) &&
+                  chi <= static_cast<int>(upper));
+    optimizer.add(assertions);
     optimizer.minimize(chi);
 
-    if (optimizer.check() == z3::sat) {
+    z3::expr_vector assumptions(ctx);
+    assumptions.push_back(
+        z3::implies(chi == static_cast<int>(upper), assertions));
+
+    switch (optimizer.check(assumptions)) {
+    case z3::sat: {
       auto model = optimizer.get_model();
       return static_cast<size_type>(model.eval(chi).get_numeral_int());
-    } else {
-      return upper_bound;
+    }
+    default: {
+      auto model = optimizer.get_model();
+      auto evaluated = model.eval(chi);
+      try {
+        return static_cast<size_type>(evaluated.get_numeral_int());
+      } catch (...) {
+        return upper;
+      }
+    }
     }
   }
 };

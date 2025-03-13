@@ -74,3 +74,12 @@ TEST(SMTCompleteGraphs, K16) {
   auto chi = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }
+
+TEST(SMTCompleteGraphs, Large) {
+  static constexpr std::size_t V = 256;
+  auto graph = pcolorizer::generators::make_complete_graph(V);
+
+  pcolorizer::SmtColorizer colorizer;
+  auto chi = colorizer.min_colors(graph);
+  EXPECT_EQ(chi, V);
+}
