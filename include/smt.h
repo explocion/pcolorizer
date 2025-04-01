@@ -19,20 +19,20 @@ class SmtColorizer : public GraphColorizer<SmtColorizer> {
 public:
   template <typename Graph, typename size_type = typename boost::graph_traits<
                                 Graph>::vertices_size_type>
-  size_type min_colors(const Graph &graph) {
+  std::pair<size_type, bool> min_colors(const Graph &graph) {
     auto num_vertices = boost::num_vertices(graph);
 
     if (pcolorizer::connected::is_complete_graph(graph)) {
-      return num_vertices;
+      return std::make_pair(num_vertices, false);
     } else if (pcolorizer::connected::is_cycle_graph(graph)) {
-      return (num_vertices % 2) + 2;
+      return std::make_pair((num_vertices % 2) + 2, false);
     }
 
     auto lower = GraphColorizer<SmtColorizer>::clique_inf(graph);
     auto upper = std::min(GraphColorizer<SmtColorizer>::combination_sup(graph),
-                          static_cast<size_type>(max_degree(graph)) + 1);
+                          static_cast<size_type>(max_degree(graph)));
     if (lower == upper) {
-      return lower;
+      return std::make_pair(lower, false);
     }
 
     auto indices = boost::get(boost::vertex_index, graph);
@@ -82,15 +82,17 @@ public:
     switch (optimizer.check(assumptions)) {
     case z3::sat: {
       auto model = optimizer.get_model();
-      return static_cast<size_type>(model.eval(chi).get_numeral_int());
+      return std::make_pair(
+          static_cast<size_type>(model.eval(chi).get_numeral_int()), false);
     }
     default: {
       auto model = optimizer.get_model();
       auto evaluated = model.eval(chi);
       try {
-        return static_cast<size_type>(evaluated.get_numeral_int());
+        return std::make_pair(
+            static_cast<size_type>(evaluated.get_numeral_int()), true);
       } catch (...) {
-        return upper;
+        return std::make_pair(upper, true);
       }
     }
     }

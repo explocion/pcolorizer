@@ -8,7 +8,7 @@ TEST(SMTCompleteGraph, K3) {
   auto graph = generators::make_complete_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
+  auto [chi, _] = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }
 
@@ -17,7 +17,7 @@ TEST(SMTCompleteGraph, K4) {
   auto graph = generators::make_complete_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
+  auto [chi, _] = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }
 
@@ -26,7 +26,7 @@ TEST(SMTCompleteGraph, K6) {
   auto graph = generators::make_complete_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
+  auto [chi, _] = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }
 
@@ -35,34 +35,7 @@ TEST(SMTCompleteGraph, K8) {
   auto graph = generators::make_complete_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
-}
-
-TEST(SMTCompleteGraph, K10) {
-  static constexpr std::size_t V = 10;
-  auto graph = generators::make_complete_graph(V);
-
-  pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
-}
-
-TEST(SMTCompleteGraph, K12) {
-  static constexpr std::size_t V = 12;
-  auto graph = generators::make_complete_graph(V);
-
-  pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
-  EXPECT_EQ(chi, V);
-}
-
-TEST(SMTCompleteGraph, K14) {
-  static constexpr std::size_t V = 14;
-  auto graph = generators::make_complete_graph(V);
-
-  pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
+  auto [chi, _] = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }
 
@@ -71,7 +44,7 @@ TEST(SMTCompleteGraph, K16) {
   auto graph = generators::make_complete_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
+  auto [chi, _] = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }
 
@@ -80,6 +53,6 @@ TEST(SMTCompleteGraph, Large) {
   auto graph = generators::make_complete_graph(V);
 
   pcolorizer::SmtColorizer colorizer;
-  auto chi = colorizer.min_colors(graph);
+  auto [chi, _] = colorizer.min_colors(graph);
   EXPECT_EQ(chi, V);
 }

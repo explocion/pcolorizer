@@ -5,8 +5,9 @@
 
 namespace generators {
 
-template <typename Graph = pcolorizer::UndirectedGraph<>>
+template <typename Graph = pcolorizer::MutableUndirectedGraph<>>
 Graph make_complete_graph(std::size_t n) {
+  BOOST_CONCEPT_ASSERT((boost::concepts::MutableGraph<Graph>));
   BOOST_CONCEPT_ASSERT((pcolorizer::concepts::VertexColorableGraph<Graph>));
 
   Graph graph(n);
@@ -18,8 +19,9 @@ Graph make_complete_graph(std::size_t n) {
   return graph;
 }
 
-template <typename Graph = pcolorizer::UndirectedGraph<>>
+template <typename Graph = pcolorizer::MutableUndirectedGraph<>>
 Graph make_cycle_graph(std::size_t n) {
+  BOOST_CONCEPT_ASSERT((boost::concepts::MutableGraph<Graph>));
   BOOST_CONCEPT_ASSERT((pcolorizer::concepts::VertexColorableGraph<Graph>));
 
   Graph graph(n);

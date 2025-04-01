@@ -27,7 +27,7 @@ public:
 
   template <typename Graph, typename size_type = typename boost::graph_traits<
                                 Graph>::vertices_size_type>
-  size_type min_colors(const Graph &graph) {
+  std::pair<size_type, bool> min_colors(const Graph &graph) {
     BOOST_CONCEPT_ASSERT((pcolorizer::concepts::VertexColorableGraph<Graph>));
 
     return this->derived().template min_colors<Graph, size_type>(graph);

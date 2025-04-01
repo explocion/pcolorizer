@@ -6,5 +6,9 @@ target_link_libraries(test_smt_complete_graphs PRIVATE z3 GTest::gtest_main)
 add_executable(test_smt_cycle_graphs test_cycle_graphs.cpp)
 target_link_libraries(test_smt_cycle_graphs PRIVATE z3 GTest::gtest_main)
 
+add_executable(test_smt_dimacs_graphs test_dimacs_graphs.cpp)
+target_link_libraries(test_smt_dimacs_graphs PRIVATE z3 GTest::gtest_main)
+
 add_test(NAME test_smt_complete_graphs COMMAND test_smt_complete_graphs)
 add_test(NAME test_smt_cycle_graphs COMMAND test_smt_cycle_graphs)
+add_test(NAME test_smt_dimacs_graphs COMMAND test_dimacs_cycle_graphs)
